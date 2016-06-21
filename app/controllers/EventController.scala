@@ -19,7 +19,7 @@ class EventController @Inject()(table: EventTable) extends Controller {
     */
   def save() = Action.async(parse.json[Event]){ request =>
     val event = request.body
-    table.save(event).map(_ => Ok("Saved event"))
+    table.save(event).map(_ => Created("Created"))
   }
 
   /** Return most recent Event JSON for a given srcId
@@ -28,7 +28,7 @@ class EventController @Inject()(table: EventTable) extends Controller {
     * @return 200 OK (Event JSON) or 404 Not Found
     */
   def getLatest(srcId: String) = Action.async{
-    table.getLatest(srcId).map(event => Ok(Json.format[Event]))
+    table.getLatest(srcId).map(event => Ok(Json.toJson[Event]))
   }
 
   /** Return an array of Event JSON for a given srcId within a time range
